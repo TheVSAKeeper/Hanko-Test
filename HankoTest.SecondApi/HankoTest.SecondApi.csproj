@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-HankoTest.SecondApi-C424AF1D-F54E-480B-B012-1604F27FCABA</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" NoWarn="NU1605"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" NoWarn="NU1605"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6"/>
+        <PackageReference Include="Microsoft.Identity.Web" Version="2.15.2"/>
+        <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.2"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\HankoTest.Shared\HankoTest.Shared.csproj"/>
+    </ItemGroup>
+
+</Project>
