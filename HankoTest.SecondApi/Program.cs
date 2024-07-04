@@ -51,6 +51,8 @@ internal static class Program
             {
                 options.Authority = builder.Configuration.GetSection(nameof(HankoOptions))[nameof(HankoOptions.JwksUrl)];
 
+                options.RequireHttpsMetadata = false;
+                
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
@@ -116,13 +118,13 @@ internal static class Program
 
         app.UseHttpsRedirection();
 
-        string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+        string[] summaries = ["Мороз", "Прохладно", "Прохладновато", "Прохладно", "Умеренно", "Тепло", "Тепло", "Жарко", "Очень жарко", "Огненно жарко"];
 
         app.MapGet("/weatherforecast", (HttpContext _) =>
             {
                 WeatherForecast[] forecast = Enumerable.Range(1, 5)
                     .Select(index =>
-                        new WeatherForecast(DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                        new WeatherForecast(Guid.NewGuid().ToString(), DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                             Random.Shared.Next(-20, 55),
                             summaries[Random.Shared.Next(summaries.Length)]))
                     .ToArray();

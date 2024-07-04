@@ -53,6 +53,8 @@ internal static class Program
             {
                 options.Authority = builder.Configuration.GetSection(nameof(HankoOptions))[nameof(HankoOptions.JwksUrl)];
 
+                options.RequireHttpsMetadata = false;
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
@@ -103,7 +105,16 @@ internal static class Program
             });
         });
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngular", policyBuilder => policyBuilder.WithOrigins("http://localhost:4200")
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+        });
+
         WebApplication app = builder.Build();
+
+        app.UseCors("AllowAngular");
 
         if (app.Environment.IsDevelopment())
         {
@@ -124,7 +135,7 @@ internal static class Program
             {
                 WeatherForecast[] forecast = Enumerable.Range(1, 5)
                     .Select(index =>
-                        new WeatherForecast(DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                        new WeatherForecast(Guid.NewGuid().ToString(), DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                             Random.Shared.Next(-20, 55),
                             summaries[Random.Shared.Next(summaries.Length)]))
                     .ToArray();
@@ -137,8 +148,7 @@ internal static class Program
 
         app.MapGet("/token", async (HttpContext _, string token, [FromServices] HankoService hankoService) => await hankoService.ValidateJwt(token))
             .WithName("ValidateToken")
-            .WithOpenApi()
-            .RequireAuthorization();
+            .WithOpenApi();
 
         app.MapGet("/token-jose", ValidateJwtJose)
             .WithName("ValidateTokenJose")
